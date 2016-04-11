@@ -23,11 +23,12 @@ html, body {
     padding: 0;
     height: 100%;
     width: 100%;
+    display: none;
 }
 .labels {
     position: absolute;
     top: 10px;
-    left: 200px;
+    right: 20px;
     width: 36px;
     height: 36px;
     margin: 0;

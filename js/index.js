@@ -1,5 +1,7 @@
 var map;
 var latitude, longitude;
+var NElat, NElng, SWlat, SElng;
+var imageMap;
 function getLocation() {
     if(window.navigator.geolocation){
         var option = {enableHighAccuracy : true};
@@ -12,11 +14,14 @@ function locationSuccess(position){
     //console.log(position);
     latitude = position.coords.latitude;
     longitude = position.coords.longitude;
+    imageMap = document.getElementById("geomapimg")
     initMap();
+    
 }
 function locationError(error){
     console.log(error);
 }
+
 function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
         center: { lat: latitude, lng: longitude },
@@ -30,12 +35,21 @@ function initMap() {
     addMap(canvas);
     label1.appendChild(canvas);
     document.body.appendChild(label1);
-    map.addListener("zoom_changed", function(){
-       //console.log(map.getBounds().getNorthEast());
-       //console.log(map.getBounds().getSouthWest());
-       imageSize.action(-1); 
+    map.addListener("tilesloaded",function(){
+        NElat = map.getBounds().getNorthEast().lat();
+        NElng = map.getBounds().getNorthEast().lng();
+        SWlat = map.getBounds().getSouthWest().lat();
+        SWlng = map.getBounds().getSouthWest().lng();
+        initGeoMap();
+        map.addListener("bounds_changed", function(){
+            NElat = map.getBounds().getNorthEast().lat();
+            NElng = map.getBounds().getNorthEast().lng();
+            SWlat = map.getBounds().getSouthWest().lat();
+            SWlng = map.getBounds().getSouthWest().lng();
+            drawImg();
+        });
     });
-    imageSize.id = "geomapimg";
-    imageSize.init();
+    
+
 }
 
